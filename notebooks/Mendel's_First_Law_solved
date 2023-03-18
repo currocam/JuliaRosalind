@@ -1,0 +1,98 @@
+### A Pluto.jl notebook ###
+# v0.17.3
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 3ef71913-3f64-42e6-a7fa-63276683682f
+using Test
+
+# ╔═╡ 7dfb13fc-c431-11ed-1057-d7520ac27a45
+md"""
+Probability is the mathematical study of randomly occurring phenomena. We will model such a phenomenon with a random variable, which is simply a variable that can take a number of different distinct outcomes depending on the result of an underlying random process.
+
+For example, say that we have a bag containing 3 red balls and 2 blue balls. If we let X
+represent the random variable corresponding to the color of a drawn ball, then the probability of each of the two outcomes is given by Pr(X=red)=35 and Pr(X=blue)=25
+
+.
+
+Random variables can be combined to yield new random variables. Returning to the ball example, let Y
+model the color of a second ball drawn from the bag (without replacing the first ball). The probability of Y being red depends on whether the first ball was red or blue. To represent all outcomes of X and Y, we therefore use a probability tree diagram. This branching diagram represents all possible individual probabilities for X and Y
+
+, with outcomes at the endpoints ("leaves") of the tree. The probability of any outcome is given by the product of probabilities along the path from the beginning of the tree; see Figure 2 for an illustrative example.
+
+An event is simply a collection of outcomes. Because outcomes are distinct, the probability of an event can be written as the sum of the probabilities of its constituent outcomes. For our colored ball example, let A
+be the event "Y is blue." Pr(A) is equal to the sum of the probabilities of two different outcomes: Pr(X=blue and Y=blue)+Pr(X=red and Y=blue), or 310+110=25
+
+(see Figure 2 above).
+
+Given: Three positive integers k, m, and n, representing a population containing k+m+n organisms: k individuals are homozygous dominant for a factor, m are heterozygous, and n are homozygous recessive.
+
+Return: The probability that two randomly selected mating organisms will produce an individual possessing a dominant allele (and thus displaying the dominant phenotype). Assume that any two organisms can mate.
+"""
+
+# ╔═╡ 26bf2062-6a50-4b6d-b91d-bd21dbb555e6
+function first_law(k::Int, m::Int, n::Int)
+	 pop = k + m + n                                               
+	 prob = (4*(k*(k-1)+2*k*m+2*k*n+m*n)+3*m*(m-1))/(4*pop*(pop-1))
+end
+
+# ╔═╡ e847fde1-aee4-4dc9-8d4e-f5ad43e1a01e
+begin
+	ϵ = 0.00001
+	@test abs(first_law(2, 2, 2)- 0.78333) < ϵ
+end
+
+# ╔═╡ 7e5447f3-0921-4d91-a06c-7fce86cbb99a
+first_law(16,18,23)
+
+# ╔═╡ 00000000-0000-0000-0000-000000000001
+PLUTO_PROJECT_TOML_CONTENTS = """
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+"""
+
+# ╔═╡ 00000000-0000-0000-0000-000000000002
+PLUTO_MANIFEST_TOML_CONTENTS = """
+# This file is machine-generated - editing it directly is not advised
+
+julia_version = "1.7.0"
+manifest_format = "2.0"
+
+[[deps.Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[deps.InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[deps.Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[deps.Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[deps.Random]]
+deps = ["SHA", "Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[deps.SHA]]
+uuid = "ea8e919c-243c-51af-8825-aaa63cd721ce"
+
+[[deps.Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[deps.Test]]
+deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
+uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+"""
+
+# ╔═╡ Cell order:
+# ╠═7dfb13fc-c431-11ed-1057-d7520ac27a45
+# ╠═3ef71913-3f64-42e6-a7fa-63276683682f
+# ╠═26bf2062-6a50-4b6d-b91d-bd21dbb555e6
+# ╠═e847fde1-aee4-4dc9-8d4e-f5ad43e1a01e
+# ╠═7e5447f3-0921-4d91-a06c-7fce86cbb99a
+# ╟─00000000-0000-0000-0000-000000000001
+# ╟─00000000-0000-0000-0000-000000000002
