@@ -30,51 +30,49 @@ Return: The ID of the string having the highest GC-content, followed by the GC-c
 
 # ╔═╡ 87dca189-c323-4bbe-bf90-0d5b56b55aa7
 function calculate_gc_content(x)
-	count(char->char=='G' || char=='C', x) / length(x)
+    count(char -> char == 'G' || char == 'C', x) / length(x)
 end
 
 # ╔═╡ 80e3e391-80d0-4c50-836c-f500dccc4714
 begin
-	ϵ = 0.001
-	@test abs(calculate_gc_content("AGCTATAG") - 0.375) < ϵ 
+    ϵ = 0.001
+    @test abs(calculate_gc_content("AGCTATAG") - 0.375) < ϵ
 end
 
 # ╔═╡ 5c91a41e-ff9a-42b6-af67-dc381fca5c7d
 function find_largest_gc(reader)
-		best = ("", -Inf)
-	    for record in reader
-        	gc = record |> FASTA.sequence|> calculate_gc_content
-			if gc > best[2]
-				best = (FASTA.identifier(record), gc)
-			end
-    	end
-	best
+    best = ("", -Inf)
+    for record in reader
+        gc = record |> FASTA.sequence |> calculate_gc_content
+        if gc > best[2]
+            best = (FASTA.identifier(record), gc)
+        end
+    end
+    best
 end
 
 # ╔═╡ 323b808e-b22f-4032-8f20-c9d07dbbaa59
 begin
-	headers = ["Rosalind_6404", "Rosalind_5959", "Rosalind_0808"]
-	sequences = [
-		dna"CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCCTCCCACTAATAATTCTGAGG",
-		dna"CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCTATATCCATTTGTCAGCAGACACGC",
-		dna"CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT"
-	]
+    headers = ["Rosalind_6404", "Rosalind_5959", "Rosalind_0808"]
+    sequences = [
+        dna"CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCCTCCCACTAATAATTCTGAGG",
+        dna"CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCTATATCCATTTGTCAGCAGACACGC",
+        dna"CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT",
+    ]
 end
 
 
 # ╔═╡ 434652b8-0e2c-4a18-8ec3-060739a8a54d
 begin
-	records = [FASTA.Record(x[1], x[2]) for x in zip(headers, sequences)]
-	@test find_largest_gc(records)[1] == "Rosalind_0808"
-	@test abs(find_largest_gc(records)[2] - 0.60919540) < ϵ 
+    records = [FASTA.Record(x[1], x[2]) for x in zip(headers, sequences)]
+    @test find_largest_gc(records)[1] == "Rosalind_0808"
+    @test abs(find_largest_gc(records)[2] - 0.60919540) < ϵ
 end
 
 # ╔═╡ fd832fd0-6e06-4b8e-9841-9b8e639e8c3f
 begin
-	infile = "../datasets/rosalind_gc.txt"
-	open(FASTA.Reader, infile) |> 
-		find_largest_gc |>
-		(x-> (x[1], 100x[2]))
+    infile = "../datasets/rosalind_gc.txt"
+    open(FASTA.Reader, infile) |> find_largest_gc |> (x -> (x[1], 100x[2]))
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

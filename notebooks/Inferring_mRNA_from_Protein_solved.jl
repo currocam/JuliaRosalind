@@ -44,12 +44,12 @@ keys(standard_trans)
 
 # ╔═╡ 4f2304a1-753d-45f3-9e54-1231387aa0e6
 function infer_mRNA(x)
-	n = 1000000
-	counter = standard_trans[AA_Term]
-	for aa in LongAA(x)
-		counter = mod(counter*standard_trans[aa], n)
-	end
-	counter
+    n = 1000000
+    counter = standard_trans[AA_Term]
+    for aa in LongAA(x)
+        counter = mod(counter * standard_trans[aa], n)
+    end
+    counter
 end
 
 # ╔═╡ b197b6bd-17d0-4542-a22b-b846e783da94
@@ -68,12 +68,12 @@ Real answer using BigInt
 
 # ╔═╡ f8e104fb-d77a-437f-9359-b1d16dacf69e
 begin
-	n = 1000000
-	counter = BigInt(standard_trans[AA_Term])
-	for aa in LongAA(x)
-		counter = counter*standard_trans[aa]
-	end
-	counter
+    n = 1000000
+    counter = BigInt(standard_trans[AA_Term])
+    for aa in LongAA(x)
+        counter = counter * standard_trans[aa]
+    end
+    counter
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

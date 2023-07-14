@@ -18,18 +18,18 @@ using BenchmarkTools
 using Distributed
 
 
-sequences = [dna"ATGTTTT", dna"ATCGTTT", dna"ATGTTCT"]  
+sequences = [dna"ATGTTTT", dna"ATCGTTT", dna"ATGTTCT"]
 
 function generate_substrings(s::LongSequence)
     n = length(s)
-    f(length) = (LongDNA{4}(s[i:i+length-1]) for i in 1:n-length+1)
-    return Iterators.flatten((f(length) for length in n:-1:1))
+    f(length) = (LongDNA{4}(s[i:i+length-1]) for i = 1:n-length+1)
+    return Iterators.flatten((f(length) for length = n:-1:1))
 end
 
 
 ## Check if a substring is a substring of all sequences
 function find_substring(sequences, substring)
-    query = ExactSearchQuery(substring);
+    query = ExactSearchQuery(substring)
     for sequence in sequences
         if !occursin(query, sequence)
             return false

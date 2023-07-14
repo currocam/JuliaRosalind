@@ -40,8 +40,8 @@ Return: An array B
  exactly.
  """
 
- using Test
- using BioSequences
+using Test
+using BioSequences
 
 function compute_probability(x, gc)
     prob = 0
@@ -52,7 +52,7 @@ function compute_probability(x, gc)
             prob += log10((1 - gc) / 2)
         end
     end
-    prob    
+    prob
 end
 
 ϵ = 1e-3

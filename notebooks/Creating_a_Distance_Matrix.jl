@@ -18,36 +18,40 @@ Return: The matrix D corresponding to the p-distance dp on the given strings. As
 s1, s2 = dna"TTTCCATTTA", dna"GATTCATTTC"
 
 function distance(s1::LongSequence, s2::LongSequence)
-  return sum(s1 .!= s2) / length(s1)
+    return sum(s1 .!= s2) / length(s1)
 end
 
 function distance_matrix(sequences)
-  n = length(sequences)
-  D = zeros(Float64, n, n)
-  # Fill upper matrix
-  for i in 1:n
-    for j in i+1:n
-      if i != j
-        D[i, j] = D[j, i] = distance(sequences[i], sequences[j])
-      end
+    n = length(sequences)
+    D = zeros(Float64, n, n)
+    # Fill upper matrix
+    for i = 1:n
+        for j = i+1:n
+            if i != j
+                D[i, j] = D[j, i] = distance(sequences[i], sequences[j])
+            end
+        end
     end
-  end
-  D
+    D
 end
 
 test_sequences = [dna"TTTCCATTTA", dna"GATTCATTTC", dna"TTTCCATTTT", dna"GTTCCATTTA"]
-@test distance_matrix(sequences) ≈ [0.0 0.4 0.1 0.1; 0.4 0.0 0.4 0.3; 0.1 0.4 0.0 0.2; 0.1 0.3 0.2 0.0]
+@test distance_matrix(sequences) ≈
+      [0.0 0.4 0.1 0.1; 0.4 0.0 0.4 0.3; 0.1 0.4 0.0 0.2; 0.1 0.3 0.2 0.0]
 
 # Read fasta file
-sequences = [LongDNA{2}(FASTX.sequence(record)) for record in open(FASTA.Reader, "datasets/rosalind_pdst.txt")]
+sequences = [
+    LongDNA{2}(FASTX.sequence(record)) for
+    record in open(FASTA.Reader, "datasets/rosalind_pdst.txt")
+]
 
 @time A = distance_matrix(sequences)
 
 # Write to file
 open("outputs/rosalind_pdst.txt", "w") do io
-  for row in eachrow(A)
-    write(io, join(row, " "), "\n")
-  end
+    for row in eachrow(A)
+        write(io, join(row, " "), "\n")
+    end
 end
 
 @benchmark distance_matrix(sequences)

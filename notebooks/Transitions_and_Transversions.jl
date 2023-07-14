@@ -20,21 +20,22 @@ Return: The transition/transversion ratio R(s1,s2)
 
 PURINES = [DNA_A, DNA_G]
 PYRIMIDINES = [DNA_C, DNA_T]
-is_transition(a, b) = (a in PURINES && b in PURINES) || (a in PYRIMIDINES && b in PYRIMIDINES)
+is_transition(a, b) =
+    (a in PURINES && b in PURINES) || (a in PYRIMIDINES && b in PYRIMIDINES)
 function transition_transversions_ratio(s1, s2)
-  transitions, transversions = 0, 0
-  for (i, j) in zip(s1, s2)
-    if i == j
-      continue
+    transitions, transversions = 0, 0
+    for (i, j) in zip(s1, s2)
+        if i == j
+            continue
+        end
+        is_transition(i, j) ? transitions += 1 : transversions += 1
     end
-    is_transition(i, j) ? transitions += 1 : transversions += 1
-  end
-  transitions / transversions
+    transitions / transversions
 end
 
 @test transition_transversions_ratio(
-  dna"GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTTGTAGTTATTGGAAGTACGGGCATCAACCCAGTT",
-  dna"TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTGCTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT"
+    dna"GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTTGTAGTTATTGGAAGTACGGGCATCAACCCAGTT",
+    dna"TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTGCTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT",
 ) ≈ 1.21428571429
 
 # Read fasta sequence one and Two

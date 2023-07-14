@@ -18,26 +18,26 @@ using Test
 
 # ╔═╡ 4170c2f7-13e6-4570-9ab0-72592a877386
 function get_url(id::String)
-	x = split(id, "_")[1]
-	"http://www.uniprot.org/uniprot/$x.fasta"
+    x = split(id, "_")[1]
+    "http://www.uniprot.org/uniprot/$x.fasta"
 end
 
 # ╔═╡ aa2e1b9d-6351-4673-9951-943ba7e50c1f
 begin
-	@test get_url("uniprot_id") == "http://www.uniprot.org/uniprot/uniprot.fasta"
-	@test get_url("uniprotid") == "http://www.uniprot.org/uniprot/uniprotid.fasta"
+    @test get_url("uniprot_id") == "http://www.uniprot.org/uniprot/uniprot.fasta"
+    @test get_url("uniprotid") == "http://www.uniprot.org/uniprot/uniprotid.fasta"
 end
 
 # ╔═╡ 364f5e5b-e421-4305-abff-96dc8de076ce
 function find_motif(motif, sequence)
-	[x.captured[1] for x in eachmatch(motif, sequence)]
+    [x.captured[1] for x in eachmatch(motif, sequence)]
 end
 
 # ╔═╡ 2fe6015e-155e-489f-9d80-d905e7d225fb
 @test find_motif(prosite"N{P}[ST]{P}", aa"NSSSPPNSSS") == [1, 7]
 
 # ╔═╡ a16d7edf-eb13-4b4a-9cb1-fc6ee1103ec5
-samples = ["A2Z669","B5ZC00","P07204_TRBM_HUMAN","P20840_SAG1_YEAST"]
+samples = ["A2Z669", "B5ZC00", "P07204_TRBM_HUMAN", "P20840_SAG1_YEAST"]
 
 # ╔═╡ 946b87b7-9371-4552-bbba-fb767c5cb9b9
 infiles = map(x -> get_url(x) |> download |> open, samples)
@@ -47,9 +47,14 @@ records = FASTAReader.(first, infiles)
 
 # ╔═╡ a9a64b2c-770f-434b-89a0-3a398f30c173
 begin
-	observed = [find_motif(prosite"N{P}[ST]{P}",  LongAA(sequence(x))) for x in records]
-	expected = [[], [85,118,142, 306, 395], [47,115, 116, 382, 409], [79 ,109 ,135, 248, 306,348 ,364 ,402 ,485 ,501 ,614] ]
-	@test observed == expected
+    observed = [find_motif(prosite"N{P}[ST]{P}", LongAA(sequence(x))) for x in records]
+    expected = [
+        [],
+        [85, 118, 142, 306, 395],
+        [47, 115, 116, 382, 409],
+        [79, 109, 135, 248, 306, 348, 364, 402, 485, 501, 614],
+    ]
+    @test observed == expected
 end
 
 # ╔═╡ 4f7a331f-09bd-4660-88af-d3f44cd3401b
@@ -59,9 +64,20 @@ md"""
 
 # ╔═╡ ca7c2512-adc1-4734-9b66-269efb7ef919
 samples2 = [
-	"A5F5B4","P46096_SYT1_MOUSE","Q9CE42","P0A4Y7","P04141_CSF2_HUMAN",
-	"Q7S432","Q4FZD7","P04921_GLPC_HUMAN","Q1JLH6","P12763_A2HS_BOVIN",
-	"Q1JHI2","P07204_TRBM_HUMAN","P47002"]
+    "A5F5B4",
+    "P46096_SYT1_MOUSE",
+    "Q9CE42",
+    "P0A4Y7",
+    "P04141_CSF2_HUMAN",
+    "Q7S432",
+    "Q4FZD7",
+    "P04921_GLPC_HUMAN",
+    "Q1JLH6",
+    "P12763_A2HS_BOVIN",
+    "Q1JHI2",
+    "P07204_TRBM_HUMAN",
+    "P47002",
+]
 
 # ╔═╡ 2c1201bb-9ab1-46a1-9c51-c59361fa65d3
 infiles2 = map(x -> get_url(x) |> download |> open, samples2)
@@ -71,14 +87,16 @@ records2 = FASTAReader.(first, infiles2)
 
 # ╔═╡ 8b836c7e-786c-40f0-892a-f6d366b8cbb0
 begin
-	open("../outputs/mprt.txt","w") do io
-	for (x, y) in zip(records2, samples2)
-		pos = find_motif(prosite"N{P}[ST]{P}",  LongAA(sequence(x)))
-		if isempty(pos) continue end
-		println(io,y)
-		println(io,join(pos, " "))
-	end
-	end
+    open("../outputs/mprt.txt", "w") do io
+        for (x, y) in zip(records2, samples2)
+            pos = find_motif(prosite"N{P}[ST]{P}", LongAA(sequence(x)))
+            if isempty(pos)
+                continue
+            end
+            println(io, y)
+            println(io, join(pos, " "))
+        end
+    end
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

@@ -26,24 +26,37 @@ Return: The total weight of P
 
 # ╔═╡ 8420ad83-d7ba-4cf8-b9c6-be3e2c70bc32
 mass_table = Dict(
-	AA_A=>71.03711, AA_C=>103.00919, AA_D=>115.02694,
-	AA_E=>129.04259, AA_F=>147.06841,AA_G=>57.02146,
-	AA_H=>137.05891, AA_I=>113.08406,AA_K=>128.09496,
-	AA_L=>113.08406, AA_M=>131.04049, AA_N=>114.04293,
-	AA_P=>97.05276, AA_Q=>128.05858,AA_R=>156.10111,
-	AA_S=>87.03203, AA_T=>101.04768, AA_V=>99.06841,
-	AA_W=>186.07931, AA_Y=>163.06333 
+    AA_A => 71.03711,
+    AA_C => 103.00919,
+    AA_D => 115.02694,
+    AA_E => 129.04259,
+    AA_F => 147.06841,
+    AA_G => 57.02146,
+    AA_H => 137.05891,
+    AA_I => 113.08406,
+    AA_K => 128.09496,
+    AA_L => 113.08406,
+    AA_M => 131.04049,
+    AA_N => 114.04293,
+    AA_P => 97.05276,
+    AA_Q => 128.05858,
+    AA_R => 156.10111,
+    AA_S => 87.03203,
+    AA_T => 101.04768,
+    AA_V => 99.06841,
+    AA_W => 186.07931,
+    AA_Y => 163.06333,
 )
 
 # ╔═╡ 527395b3-c26d-4ec2-a02b-dee49d4ee7f4
 function calculate_mass(x, table)
-	sum(mass_table[char] for char in x)
+    sum(mass_table[char] for char in x)
 end
 
 # ╔═╡ 6d0a6eec-382f-40aa-b228-c6b7dedbad0d
 begin
-	ϵ = 0.0001
-	@test calculate_mass(aa"SKADYEK", mass_table) - 821.392 < ϵ
+    ϵ = 0.0001
+    @test calculate_mass(aa"SKADYEK", mass_table) - 821.392 < ϵ
 end
 
 # ╔═╡ e4a952fa-600d-4b6c-b3cd-299cd372e966
@@ -51,9 +64,9 @@ x = aa"SKADYEK"
 
 # ╔═╡ 2b033f4d-5a83-42fd-905c-28c148c82c77
 begin
-	f = open("../datasets/rosalind_prtm.txt");
-	lines = readlines(f);
-	sequence = LongAA(lines[1])
+    f = open("../datasets/rosalind_prtm.txt")
+    lines = readlines(f)
+    sequence = LongAA(lines[1])
 end
 
 # ╔═╡ f548976e-509c-4bbc-bb2b-f785e16aff19

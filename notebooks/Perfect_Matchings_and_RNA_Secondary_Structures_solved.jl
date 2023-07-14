@@ -48,8 +48,8 @@ Return: The total possible number of perfect matchings of basepair edges in the 
 using BioSequences
 using Test
 function count_perfect_matchings(x::LongRNA)
-    strong_edges = BigInt(count(y -> y ==RNA_A, x))
-    weak_edges = BigInt(count(y -> y ==RNA_C, x))
+    strong_edges = BigInt(count(y -> y == RNA_A, x))
+    weak_edges = BigInt(count(y -> y == RNA_C, x))
     return factorial(strong_edges) * factorial(weak_edges)
 end
 @test count_perfect_matchings(rna"AGCUAGUCAU") == 12

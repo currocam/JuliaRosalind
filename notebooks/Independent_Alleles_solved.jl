@@ -37,18 +37,18 @@ Aa Bb organisms will belong to the k-th generation of Tom's family tree (don't c
 
 # ╔═╡ e716f63a-e66c-47f1-b917-9dde074f98bb
 function f(k, N)
-	d = Binomial(2^k, 0.25)
-	sum(pdf.(d, N:2^k))
+    d = Binomial(2^k, 0.25)
+    sum(pdf.(d, N:2^k))
 end
 
 # ╔═╡ f3a3870a-a45d-485e-8e2c-77e0ceef08b5
 begin
-	ϵ = 0.001
-	@test abs(f(2, 1) - 0.684) <  ϵ
+    ϵ = 0.001
+    @test abs(f(2, 1) - 0.684) < ϵ
 end
 
 # ╔═╡ 4fb76714-9cb1-4731-af80-5fa287797f23
-round(f(5, 7), digits=3)
+round(f(5, 7), digits = 3)
 
 # ╔═╡ c934c6e4-7ef8-45f6-bb93-3b503fa059df
 

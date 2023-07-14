@@ -27,18 +27,17 @@ Return: The protein string encoded by s
 
 # ╔═╡ 065318bc-3f3f-457a-a749-604415d19d83
 function translate2string(x)
-	x |> LongRNA{2} |>
-		translate |> String |>
-		y-> split(y, "*")[1]
+    x |> LongRNA{2} |> translate |> String |> y -> split(y, "*")[1]
 end
 
 # ╔═╡ dfe6f738-d735-4d89-877c-f31763b75867
-@test translate2string("AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA") == "MAMAPRTEINSTRING"
+@test translate2string("AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA") ==
+      "MAMAPRTEINSTRING"
 
 # ╔═╡ 5a22c898-df41-47fe-bf0d-eac5925c764c
 begin
-	infile = open("../datasets/rosalind_prot.txt");
-	sequence = readlines(infile)[1];
+    infile = open("../datasets/rosalind_prot.txt")
+    sequence = readlines(infile)[1]
 end
 
 # ╔═╡ a29d775b-fdec-4b0d-9a5e-7d82a322c891

@@ -31,16 +31,16 @@ Return: The expected number of offspring displaying the dominant phenotype in th
 
 # ╔═╡ b4ff96c8-6278-4119-8086-0d27d781dad0
 function expected_offspring(genotypes)
-	probabilities = (1, 1, 1, 0.75, 0.5, 0)
-	n_offpring = 2
-	sum([n_offpring*k*p for (k, p) in zip(genotypes, probabilities)])
+    probabilities = (1, 1, 1, 0.75, 0.5, 0)
+    n_offpring = 2
+    sum([n_offpring * k * p for (k, p) in zip(genotypes, probabilities)])
 end
 
 # ╔═╡ add6ea75-a24a-44ba-96c4-8ccd14a0fbdb
 begin
-	ϵ = 0.001
-	genotypes = (1,0, 0, 1, 0, 1)
-	@test abs(expected_offspring(genotypes) - 3.5) < ϵ
+    ϵ = 0.001
+    genotypes = (1, 0, 0, 1, 0, 1)
+    @test abs(expected_offspring(genotypes) - 3.5) < ϵ
 end
 
 # ╔═╡ febfbd8d-dda4-4435-990b-2e993af7624a

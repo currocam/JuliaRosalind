@@ -26,8 +26,8 @@ of s.
 
 # ╔═╡ 8b69d3a8-c33e-4411-9822-e14eaf6b5874
 function complementate(x::String)
-	dict = Dict('A' => 'T', 'C'=> 'G', 'G'=> 'C', 'T'=>'A')
-	map(y->dict[y], x) |> reverse
+    dict = Dict('A' => 'T', 'C' => 'G', 'G' => 'C', 'T' => 'A')
+    map(y -> dict[y], x) |> reverse
 end
 
 # ╔═╡ 23793c37-4f30-4937-a5e0-004f315a3016
@@ -38,10 +38,10 @@ complementate("AAAACCCGGT")
 
 # ╔═╡ 5c62cad4-bfdd-4844-8b3d-7e50d88f00fb
 begin
-		f = open("../datasets/rosalind_revc.txt");
-		lines = readlines(f);
-		sequence = lines[1]
-	
+    f = open("../datasets/rosalind_revc.txt")
+    lines = readlines(f)
+    sequence = lines[1]
+
 end
 
 # ╔═╡ 59646b4e-849a-4ff9-9cd3-f87bd5cf73e1

@@ -28,17 +28,17 @@ Return: The transcribed RNA string of t
 
 # ╔═╡ 06214641-de7c-45c7-bb5b-b2dd8a68caa8
 function transcribe(dna::String)
-		replace(dna, "T"=>"U")
-	end
+    replace(dna, "T" => "U")
+end
 
 # ╔═╡ 23927e5a-e18c-4172-92bf-3d69cf2fd110
- @test transcribe("GATGGAACTTGACTACGTAAATT") == "GAUGGAACUUGACUACGUAAAUU"
+@test transcribe("GATGGAACTTGACTACGTAAATT") == "GAUGGAACUUGACUACGUAAAUU"
 
 # ╔═╡ 0aa14549-2bd2-4849-b5c6-f763e99dc7db
 begin
-	f = open("../datasets/rosalind_rna.txt");
-	lines = readlines(f);
-	sequence = lines[1]
+    f = open("../datasets/rosalind_rna.txt")
+    lines = readlines(f)
+    sequence = lines[1]
 end
 
 # ╔═╡ 1c81b55c-87e9-440c-acb6-3a12af14654f

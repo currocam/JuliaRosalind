@@ -26,27 +26,31 @@ Return: The total number of pairs of rabbits that will remain after the n
 
 # ╔═╡ 663784fd-af31-416f-8d77-bff1a1c53014
 function mortal_fibonacci(n, m)
-	if n < 3 return 1  end
-	if n == 3 return 2  end	
-	alive = Vector{Int}(undef,n)
-	alive[1]= 1
-	alive[2]=1
-	for i in range(3, m+1)
-		alive[i] = alive[i - 1] + alive[i - 2]
-	end
-	alive[m+1] -= 1 
-	for i in range(m+2, n)
-		alive[i] = alive[i - 1] + alive[i - 2] - alive[i - m - 1]
-	end		
-	alive[n]
+    if n < 3
+        return 1
+    end
+    if n == 3
+        return 2
+    end
+    alive = Vector{Int}(undef, n)
+    alive[1] = 1
+    alive[2] = 1
+    for i in range(3, m + 1)
+        alive[i] = alive[i-1] + alive[i-2]
+    end
+    alive[m+1] -= 1
+    for i in range(m + 2, n)
+        alive[i] = alive[i-1] + alive[i-2] - alive[i-m-1]
+    end
+    alive[n]
 end
 
 # ╔═╡ 6ec985f5-320b-4e07-8653-4f68b72e0370
 begin
-	rabbits = [1, 1, 2, 2, 3, 4]
-	for (month, value) in enumerate(rabbits)
-	           @test mortal_fibonacci(month, 3) == value
-	       end
+    rabbits = [1, 1, 2, 2, 3, 4]
+    for (month, value) in enumerate(rabbits)
+        @test mortal_fibonacci(month, 3) == value
+    end
 end
 
 # ╔═╡ da13fb36-a8d2-4ef1-8b8e-c76162f1dcad

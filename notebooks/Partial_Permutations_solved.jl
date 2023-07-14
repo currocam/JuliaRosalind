@@ -31,7 +31,7 @@ using Combinatorics
 function factorial_modulo(x)
     n = 1_000_000
     result = UInt64(1)
-    for i in 1:x
+    for i = 1:x
         result = mod(result * i, n)
     end
     return result

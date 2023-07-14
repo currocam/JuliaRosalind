@@ -24,52 +24,55 @@ Return: Every distinct candidate protein string that can be translated from ORFs
 
 # ╔═╡ 0b0ed89f-c4e2-4c7d-96eb-9fdb8e19bebd
 open(FASTA.Reader, "../datasets/rosalind_orf.txt") do reader
-	global sequence_dna = reader |>
-		first |> sequence |> LongDNA{4}
+    global sequence_dna = reader |> first |> sequence |> LongDNA{4}
 end
 
 # ╔═╡ 3e00dbfd-0d40-4a61-9af1-3ee373e954c4
-sequence_dna_sample = dna"AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG"
+sequence_dna_sample =
+    dna"AGCCATGTAGCTAACTCAGGTTACATGGGGATGACCCCGCGACTTGGATTAGAGTCTCTTTTGGAATAAGCCTGAATGATCCGAGTAGCATCTCAG"
 
 # ╔═╡ 315e122b-c380-4a2a-8c12-70c571ce8d9d
 sequence_rna = convert(LongRNA{4}, reverse_complement(sequence_dna))
 
 # ╔═╡ 5a68f8be-c82f-437c-94a0-2ab20a037399
 function find_codon(x, sequence)
-	first.(findall(ExactSearchQuery(x), sequence))
+    first.(findall(ExactSearchQuery(x), sequence))
 end
 
 # ╔═╡ 69890660-3c13-4dbb-acc0-c872851cbdf7
 function find_all_frames(x)
-	starts = find_codon(rna"AUG", x)
-	terminations = collect(Iterators.flatten(find_codon(term, x) for term in [rna"UAA", rna"UAG", rna"UGA"]))
-	frames = []
-	for s in starts
-		for t in terminations
-			if s <= t && (t-s)%3 == 0
-				push!(frames, s:t-1)
-				break
-			end
-		end
-	end
-	frames
+    starts = find_codon(rna"AUG", x)
+    terminations = collect(
+        Iterators.flatten(find_codon(term, x) for term in [rna"UAA", rna"UAG", rna"UGA"]),
+    )
+    frames = []
+    for s in starts
+        for t in terminations
+            if s <= t && (t - s) % 3 == 0
+                push!(frames, s:t-1)
+                break
+            end
+        end
+    end
+    frames
 end
 
 # ╔═╡ 4537523f-b60f-46b3-afb5-8fbdfaa43e07
 directed = translate.([sequence_rna[f] for f in find_all_frames(sequence_rna)])
 
 # ╔═╡ 98603f1a-f6d3-4fc3-8bb9-70e31de5c124
-reversed = translate.([reverse_complement(sequence_rna)[f] for f in find_all_frames(sequence_rna)])
+reversed =
+    translate.([reverse_complement(sequence_rna)[f] for f in find_all_frames(sequence_rna)])
 
 # ╔═╡ 611739f7-4a30-4aad-b85d-a28d00123cf9
-sequences =  unique(vcat(directed, reversed))
+sequences = unique(vcat(directed, reversed))
 
 # ╔═╡ ef30f75b-79b5-4c1f-b14e-824dcee45374
 #cat rosalind_orf.txt | cut -f1 -d"*" > rosalind_orf2.txt
 open("../outputs/rosalind_orf.txt", "w") do io
-	for sequence in sequences
-		println(io, String(sequence))
-	end
+    for sequence in sequences
+        println(io, String(sequence))
+    end
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

@@ -34,7 +34,9 @@ months, if we begin with 1 pair and in each generation, every pair of reproducti
 
 # ╔═╡ 444a68e0-3f08-49ee-a5dd-35aba303c99d
 function fibonacci_rabbit(n::Int, k::Int)
-    if n < 3 return 1 end
+    if n < 3
+        return 1
+    end
     acc = acc1 = 1
     while n > 2
         acc, acc1 = acc + k * acc1, acc

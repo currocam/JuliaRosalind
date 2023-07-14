@@ -26,8 +26,8 @@ Return: The Hamming distance dH(s,t)
 
 # ╔═╡ 2463302a-caaf-4171-8eaa-08d33e9c6209
 function hamming_distance(x, y)
-	seq1, seq2 = LongDNA{2}(x), LongDNA{2}(y)
-	count(!=, seq1, seq2)
+    seq1, seq2 = LongDNA{2}(x), LongDNA{2}(y)
+    count(!=, seq1, seq2)
 end
 
 # ╔═╡ 4b6877b6-4874-4473-99ee-9bbe808695bb
@@ -35,10 +35,10 @@ end
 
 # ╔═╡ 49c070e9-b0d4-47a8-af90-bd50c3bd94b9
 begin
-	f = open("../datasets/rosalind_hamm.txt");
-	lines = readlines(f);
-	x = lines[1]	
-	y = lines[2]
+    f = open("../datasets/rosalind_hamm.txt")
+    lines = readlines(f)
+    x = lines[1]
+    y = lines[2]
 end
 
 # ╔═╡ 5f31fce3-9983-4777-a329-3aa3ec43d019

@@ -14,18 +14,21 @@ Return: All strings of length n
 that can be formed from the alphabet, ordered lexicographically (use the standard order of symbols in the English alphabet).
 """
 
-lexicographic_permutations(alphabet, n) = Iterators.product(Iterators.repeated(alphabet, n)...) |> collect |> vec |> sort
+lexicographic_permutations(alphabet, n) =
+    Iterators.product(Iterators.repeated(alphabet, n)...) |> collect |> vec |> sort
 
-@test all(lexicographic_permutations(split("A C G T"), 2) .== lexicographic_permutations(split("A G C T"), 2))
+@test all(
+    lexicographic_permutations(split("A C G T"), 2) .==
+    lexicographic_permutations(split("A G C T"), 2),
+)
 
 # Print the permutations separated by new line into file using println
 open("outputs/rosalind_lexf.txt", "w") do io
-  @time permutations = lexicographic_permutations(split("A B C D E F"), 3)
-  for permutation in permutations
-    write(io, join(permutation, ""))
-    write(io, "\n")
-  end
+    @time permutations = lexicographic_permutations(split("A B C D E F"), 3)
+    for permutation in permutations
+        write(io, join(permutation, ""))
+        write(io, "\n")
+    end
 end
 
 @benchmark permutations = lexicographic_permutations(split("A B C D E F"), 5)
-

@@ -21,17 +21,18 @@ Return: A protein string resulting from transcribing and translating the exons o
 """
 
 function translate_with_introns(sequence, introns)
-	queries = ExactSearchQuery.(introns)
-	indexes = [findall(query, sequence) for query in queries] |>
-		Iterators.flatten |> collect
-	is_intron = x -> any([x in intron for intron in indexes])
-	exons = sequence[[i for i in 1:length(sequence) if !is_intron(i)]]
-	protein = translate(exons)
-	termination = findfirst(AA_Term, protein)
-	protein[1:termination-1]
-	end
+    queries = ExactSearchQuery.(introns)
+    indexes =
+        [findall(query, sequence) for query in queries] |> Iterators.flatten |> collect
+    is_intron = x -> any([x in intron for intron in indexes])
+    exons = sequence[[i for i = 1:length(sequence) if !is_intron(i)]]
+    protein = translate(exons)
+    termination = findfirst(AA_Term, protein)
+    protein[1:termination-1]
+end
 
-sequence_sample = dna"ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG"
+sequence_sample =
+    dna"ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG"
 
 introns = [dna"ATCGGTCGAA", dna"ATCGGTCGAGCGTGT"]
 

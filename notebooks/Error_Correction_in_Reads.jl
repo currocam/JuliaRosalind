@@ -15,61 +15,65 @@ Return: A list of all corrections in the form "[old read]->[new read]". (Each co
 """
 
 function distance(s1::LongDNA, s2::LongDNA)
-  min(
-    sum(s1 .!= s2),
-    sum(reverse_complement(s1) .!= s2)
-  )
+    min(sum(s1 .!= s2), sum(reverse_complement(s1) .!= s2))
+end
+function distance_matrix(sequences)
+    n = length(sequences)
+    D = zeros(Int64, n, n)
+    for i = 1:n
+        @inbounds for j = i+1:n
+            D[i, j] = D[j, i] = distance(sequences[i], sequences[j])
+        end
+    end
+    return D
 end
 
-function distance_matrix(sequences)
-  n = length(sequences)
-  D = zeros(Int, n, n)
-  # Fill upper matrix
-  for i in 1:n
-    for j in i+1:n
-      if i != j
-        D[i, j] = D[j, i] = distance(sequences[i], sequences[j])
-      end
-    end
-  end
-  D
-end
+
 
 test_sequences = [
-  dna"TCATC",
-  dna"TTCAT",
-  dna"TCATC",
-  dna"TGAAA",
-  dna"GAGGA",
-  dna"TTTCA",
-  dna"ATCAA",
-  dna"TTGAT",
-  dna"TTTCC"
+    dna"TCATC",
+    dna"TTCAT",
+    dna"TCATC",
+    dna"TGAAA",
+    dna"GAGGA",
+    dna"TTTCA",
+    dna"ATCAA",
+    dna"TTGAT",
+    dna"TTTCC",
 ]
 
 function corrected_reads(sequences)
-  D = distance_matrix(sequences)
-  duplicates = [x.I[1] for x in findall(D .== 0) |> filter(x -> x[1] > x[2])]
-  corrections = Dict{LongDNA,LongDNA}()
-  for snp in findall(D .== 1) |> filter(x -> x[1] in duplicates)
-    if sum(sequences[snp.I[2]] .!= sequences[snp.I[1]]) == 1
-      corrections[sequences[snp.I[2]]] = sequences[snp.I[1]]
-    else
-      corrections[sequences[snp.I[2]]] = reverse_complement(sequences[snp.I[1]])
+    D = distance_matrix(sequences)
+    duplicates = Set(x.I[1] for x in findall(D .== 0) if x[1] > x[2])
+    corrections = Dict{LongDNA,LongDNA}()
+    for snp in findall(D .== 1)
+        if snp.I[1] in duplicates
+            seq1 = sequences[snp.I[1]]
+            seq2 = sequences[snp.I[2]]
+            if count(x -> x[1] != x[2], zip(seq1, seq2)) == 1
+                corrections[seq2] = seq1
+            else
+                corrections[seq2] = reverse_complement(seq1)
+            end
+        end
     end
-  end
-  corrections
+    return corrections
 end
 
-expected = Dict(dna"TTCAT" => dna"TTGAT", dna"GAGGA" => dna"GATGA", dna"TTTCC" => dna"TTTCA")
+
+expected =
+    Dict(dna"TTCAT" => dna"TTGAT", dna"GAGGA" => dna"GATGA", dna"TTTCC" => dna"TTTCA")
 @test expected == corrected_reads(test_sequences)
 
-sequences = [LongDNA{2}(FASTX.sequence(record)) for record in open(FASTA.Reader, "datasets/rosalind_corr.txt")]
+sequences = [
+    LongDNA{2}(FASTX.sequence(record)) for
+    record in open(FASTA.Reader, "datasets/rosalind_corr.txt")
+]
 @time corrections = corrected_reads(sequences)
 open("outputs/rosalind_corr.txt", "w") do io
-  for old in keys(corrections)
-    write(io, "$(old)->$(corrections[old])\n")
-  end
+    for old in keys(corrections)
+        write(io, "$(old)->$(corrections[old])\n")
+    end
 end
 
 @benchmark corrected_reads(sequences)

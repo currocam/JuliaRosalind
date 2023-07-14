@@ -19,9 +19,13 @@ in which the symbols of t appear as a subsequence of s. If multiple solutions ex
 """
 
 function spliced_motif(s, t)
-  scoremodel = AffineGapScoreModel(DichotomousSubstitutionMatrix(1, -1), gap_open=0, gap_extend=0)
-  aln = pairalign(GlobalAlignment(), s, t, scoremodel) |> alignment
-  filter(i -> seq2aln(aln, i)[2] == OP_SEQ_MATCH, eachindex(s))
+    scoremodel = AffineGapScoreModel(
+        DichotomousSubstitutionMatrix(1, -1),
+        gap_open = 0,
+        gap_extend = 0,
+    )
+    aln = pairalign(GlobalAlignment(), s, t, scoremodel) |> alignment
+    filter(i -> seq2aln(aln, i)[2] == OP_SEQ_MATCH, eachindex(s))
 end
 
 @test spliced_motif(dna"ACGTACGTGACG", dna"GTA") == [3, 4, 5]
@@ -35,5 +39,5 @@ t = FASTX.sequence(LongDNA{2}, records[2])
 
 # Print the positions separated by space into file
 open("outputs/rosalind_sseq.txt", "w") do io
-  write(io, join(positions, " "))
+    write(io, join(positions, " "))
 end

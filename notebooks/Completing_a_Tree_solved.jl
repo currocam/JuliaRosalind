@@ -29,7 +29,7 @@ Sample Output
 using Test
 struct Tree
     n::Int
-    adjacency_list::Array{Tuple{UInt64, UInt64}}
+    adjacency_list::Array{Tuple{UInt64,UInt64}}
 end
 
 
@@ -47,7 +47,7 @@ function read_tree(filename)
     end
 end
 
-count_missing_edges = x ->x.n - length(x.adjacency_list) - 1 
+count_missing_edges = x -> x.n - length(x.adjacency_list) - 1
 
 example_tree = Tree(10, [(1, 2), (2, 8), (4, 10), (5, 9), (6, 10), (7, 9)])
 

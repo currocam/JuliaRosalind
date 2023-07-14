@@ -51,35 +51,56 @@ Return: A consensus string and profile matrix for the collection. (If several po
 """
 
 # ╔═╡ ec53ac85-fe1f-4d76-a508-399ff710e939
-records_sample = FASTA.Record.("seq", ["ATCCAGCT", "GGGCAACT", "ATGGATCT", "AAGCAACC","TTGGAACT", "ATGCCATT", "ATGGCACT"])
+records_sample =
+    FASTA.Record.(
+        "seq",
+        [
+            "ATCCAGCT",
+            "GGGCAACT",
+            "ATGGATCT",
+            "AAGCAACC",
+            "TTGGAACT",
+            "ATGCCATT",
+            "ATGGCACT",
+        ],
+    )
 
 # ╔═╡ a34d02ab-129e-4352-a3dc-340fe22742b3
 function profile_matrix(r)
-	records = [LongDNA{4}(sequence(x)) for x in r]
-	n = length(records[1])
-	profile = zeros(Int, 4, n)
-	for x in records
-	for (i, char) in enumerate(x)
-		if char== DNA_A profile[1, i]+=1 end 
-		if char== DNA_C profile[2, i]+=1 end 
-		if char== DNA_G profile[3, i]+=1 end 
-		if char== DNA_T profile[4, i]+=1 end 
-	end end
-	profile
+    records = [LongDNA{4}(sequence(x)) for x in r]
+    n = length(records[1])
+    profile = zeros(Int, 4, n)
+    for x in records
+        for (i, char) in enumerate(x)
+            if char == DNA_A
+                profile[1, i] += 1
+            end
+            if char == DNA_C
+                profile[2, i] += 1
+            end
+            if char == DNA_G
+                profile[3, i] += 1
+            end
+            if char == DNA_T
+                profile[4, i] += 1
+            end
+        end
+    end
+    profile
 end
 
 # ╔═╡ 004997a1-e07a-4b10-8ee3-3f7e87a5e132
 function consensus_sequence(profile)
-	dict = Dict(1=>DNA_A, 2=>DNA_C, 3=>DNA_G, 4=>DNA_T)
-	LongDNA{4}([dict[argmax(col)] for col in eachcol(profile)])
+    dict = Dict(1 => DNA_A, 2 => DNA_C, 3 => DNA_G, 4 => DNA_T)
+    LongDNA{4}([dict[argmax(col)] for col in eachcol(profile)])
 end
 
 # ╔═╡ 85de25cd-b4d2-44d6-b465-b9a272db725b
-@test records_sample|> profile_matrix |> consensus_sequence |> String == "ATGCAACT"
+@test records_sample |> profile_matrix |> consensus_sequence |> String == "ATGCAACT"
 
 # ╔═╡ 3a8790ca-75b5-4351-8152-1a885725a56f
 open(FASTA.Reader, "../datasets/rosalind_cons.txt") do reader
-global records = [r for r in reader]
+    global records = [r for r in reader]
 end
 
 # ╔═╡ 023ee250-3665-47a2-b545-81eea0a35044
@@ -93,8 +114,8 @@ consensus = profile |> consensus_sequence |> String
 
 # ╔═╡ 07716619-b165-4b9f-950d-ec5c199f261b
 open("../outputs/rosalind_cons.txt", "w") do io
-	println(io, consensus)
-	writedlm(io, profile, ' ')
+    println(io, consensus)
+    writedlm(io, profile, ' ')
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

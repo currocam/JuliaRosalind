@@ -15,11 +15,11 @@ Return: The 4-mer composition of s.
 # Get the integer representation of the sequence
 nucleotide2int = Dict{DNA,Int8}(DNA_A => 0, DNA_C => 1, DNA_G => 2, DNA_T => 3)
 function lexicographical_position(s::LongDNA, k::Int)
-  pos = 0
-  for i in 1:k
-    pos += nucleotide2int[s[i]] * 4^(k - i)
-  end
-  pos + 1
+    pos = 0
+    for i = 1:k
+        pos += nucleotide2int[s[i]] * 4^(k - i)
+    end
+    pos + 1
 end
 
 # create test set for lexicographical_position
@@ -29,25 +29,28 @@ end
 @test lexicographical_position(dna"TTTT", 4) == 256
 
 function count_kmers(s::LongDNA, k::Int)
-  counts = zeros(Int, 4^k)
-  for i in 1:length(s)-k+1
-    counts[lexicographical_position(s[i:i+k-1], k)] += 1
-  end
-  counts
+    counts = zeros(Int, 4^k)
+    for i = 1:length(s)-k+1
+        counts[lexicographical_position(s[i:i+k-1], k)] += 1
+    end
+    counts
 end
 
 @test count_kmers(dna"", 1) == [0, 0, 0, 0]
 @test count_kmers(dna"ACG", 1) == [1, 1, 1, 0]
 
-s = open(FASTA.Reader, "datasets/rosalind_kmer.txt") |>
-    first |> FASTX.sequence |> LongDNA{2}
+s =
+    open(FASTA.Reader, "datasets/rosalind_kmer.txt") |>
+    first |>
+    FASTX.sequence |>
+    LongDNA{2}
 
 @time counts = count_kmers(s, 4)
 
 open("outputs/rosalind_kmer.txt", "w") do io
-  for i in counts
-    write(io, "$i ")
-  end
+    for i in counts
+        write(io, "$i ")
+    end
 end
 
 @benchmark count_kmers(s, 4)

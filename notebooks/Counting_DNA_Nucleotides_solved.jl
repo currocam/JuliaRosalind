@@ -24,25 +24,25 @@ First, we define the function count_dna:
 """
 
 # ╔═╡ f78835b1-6505-4e44-a4dc-22cba6e09df4
-import StatsBase: countmap 
+import StatsBase: countmap
 
 # ╔═╡ 744a5048-f7de-4936-b72e-06bcd64e906b
 function count_dna(x::String)
-	y = countmap(x)
-	[y['A'], y['C'], y['G'], y['T']]
-       end
+    y = countmap(x)
+    [y['A'], y['C'], y['G'], y['T']]
+end
 
 # ╔═╡ b3ffe63e-9b48-4e61-ba48-62d3723f295e
 begin
-	x = "AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"
-	@test  join([string(x) for x in count_dna(x)], " ") == "20 12 17 21"
+    x = "AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"
+    @test join([string(x) for x in count_dna(x)], " ") == "20 12 17 21"
 end
 
 # ╔═╡ 0749fa89-0d06-4d7e-99cd-8c99a9ccf74f
 begin
-	f = open("../datasets/rosalind_dna.txt");
-	lines = readlines(f);
-	sequence = lines[1]
+    f = open("../datasets/rosalind_dna.txt")
+    lines = readlines(f)
+    sequence = lines[1]
 end
 
 # ╔═╡ fcd74f2d-ae6b-4d33-ae46-ab014aa4d228

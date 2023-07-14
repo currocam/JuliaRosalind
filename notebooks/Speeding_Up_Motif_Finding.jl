@@ -13,21 +13,22 @@ Given: A DNA string s (of length at most 100 kbp) in FASTA format.
 Return: The failure array of s.
 """
 function failure_array(x::LongSequence)
-  n = length(x)
-  f = zeros(Int, n)
-  for k in 2:n
-    j = f[k-1]
-    while j > 0 && x[k] != x[j+1]
-      j = f[j]
+    n = length(x)
+    f = zeros(Int, n)
+    for k = 2:n
+        j = f[k-1]
+        while j > 0 && x[k] != x[j+1]
+            j = f[j]
+        end
+        if x[k] == x[j+1]
+            f[k] = j + 1
+        end
     end
-    if x[k] == x[j+1]
-      f[k] = j + 1
-    end
-  end
-  return f
+    return f
 end
 
-@test failure_array(dna"CAGCATGGTATCACAGCAGAG") == [0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 3, 4, 5, 3, 0, 0]
+@test failure_array(dna"CAGCATGGTATCACAGCAGAG") ==
+      [0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 3, 4, 5, 3, 0, 0]
 
 # read FASTA
 records = [record for record in open(FASTA.Reader, "datasets/rosalind_kmp.txt")]
@@ -36,7 +37,7 @@ s = FASTX.sequence(LongDNA{2}, records[1])
 @time f = failure_array(s)
 # write to file
 open("outputs/rosalind_kmp.txt", "w") do io
-  write(io, join(f, " "))
+    write(io, join(f, " "))
 end
 
 @benchmark failure_array(s)

@@ -38,43 +38,51 @@ Return: The adjacency list corresponding to O3
 
 # ╔═╡ f999b4e1-567e-463e-8db4-896c5a15c208
 function overlap_graphs(records, k)
-	graph = Array{Tuple{String,String},1}()
-	for seq1 in records, seq2 in records 
-		if seq1 == seq2 continue end
-		if sequence(seq1)[end-k+1:end]== sequence(seq2)[1:k]
-			push!(graph,(identifier(seq1), identifier(seq2)))
-		end
-	end
-	graph
+    graph = Array{Tuple{String,String},1}()
+    for seq1 in records, seq2 in records
+        if seq1 == seq2
+            continue
+        end
+        if sequence(seq1)[end-k+1:end] == sequence(seq2)[1:k]
+            push!(graph, (identifier(seq1), identifier(seq2)))
+        end
+    end
+    graph
 end
 
 # ╔═╡ 44da0576-5626-4541-afaa-624e051cb8fe
 begin
-	headers = ["Rosalind_0498", "Rosalind_2391", "Rosalind_2323", "Rosalind_0442", "Rosalind_5013"]
-	sequences = [dna"AAATAAA", dna"AAATTTT", dna"TTTTCCC", dna"AAATCCC", dna"GGGTGGG"]
-	records = [FASTA.Record(h, s) for (h, s) in zip(headers, sequences)]
-	expected = [
-		("Rosalind_0498", "Rosalind_2391"),
-		("Rosalind_0498","Rosalind_0442"),
-		("Rosalind_2391", "Rosalind_2323")
-	]
-	@test overlap_graphs(records, 3) == expected
+    headers = [
+        "Rosalind_0498",
+        "Rosalind_2391",
+        "Rosalind_2323",
+        "Rosalind_0442",
+        "Rosalind_5013",
+    ]
+    sequences = [dna"AAATAAA", dna"AAATTTT", dna"TTTTCCC", dna"AAATCCC", dna"GGGTGGG"]
+    records = [FASTA.Record(h, s) for (h, s) in zip(headers, sequences)]
+    expected = [
+        ("Rosalind_0498", "Rosalind_2391"),
+        ("Rosalind_0498", "Rosalind_0442"),
+        ("Rosalind_2391", "Rosalind_2323"),
+    ]
+    @test overlap_graphs(records, 3) == expected
 end
 
 # ╔═╡ 9edde78d-b1b0-4259-922d-0080bd5c0444
 begin
-	open(FASTA.Reader, "../datasets/rosalind_grph.txt") do reader
-	    global graph = overlap_graphs([x for x in reader], 3)
-	end
+    open(FASTA.Reader, "../datasets/rosalind_grph.txt") do reader
+        global graph = overlap_graphs([x for x in reader], 3)
+    end
 end
 
 # ╔═╡ 705aba37-01cf-4d63-9f1b-479609552959
 begin
-		outfile = open("../outputs/rosalind_grph.txt", "w")
-		for (from, dest) in graph
-			println(outfile, join([from, dest], " "))
-		end
-		close(outfile)
+    outfile = open("../outputs/rosalind_grph.txt", "w")
+    for (from, dest) in graph
+        println(outfile, join([from, dest], " "))
+    end
+    close(outfile)
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

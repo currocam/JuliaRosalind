@@ -9,16 +9,17 @@ Return: The probability that if N random DNA strings having the same length as s
 """
 
 
-weights = x -> Dict(DNA_A => (1 - x) / 2, DNA_C => x / 2, DNA_G => x / 2, DNA_T => (1 - x) / 2) # A C G T
+weights =
+    x -> Dict(DNA_A => (1 - x) / 2, DNA_C => x / 2, DNA_G => x / 2, DNA_T => (1 - x) / 2) # A C G T
 function probability_motif(N, w, s)
-  log_p_sucess = BigFloat(0)
-  for char in s
-    log_p_sucess += log(w[char])
-  end
-  1 - exp(log(1 - exp(log_p_sucess)) * N)
+    log_p_sucess = BigFloat(0)
+    for char in s
+        log_p_sucess += log(w[char])
+    end
+    1 - exp(log(1 - exp(log_p_sucess)) * N)
 end
 
-@test isapprox(probability_motif(90000, weights(0.6), dna"ATAGCCGA"), 0.689, atol=0.001)
+@test isapprox(probability_motif(90000, weights(0.6), dna"ATAGCCGA"), 0.689, atol = 0.001)
 
 N = 88418
 cg_content = 0.506549

@@ -29,8 +29,8 @@ Return: All locations of t as a substring of s.
 
 # ╔═╡ 4a59a570-a8e0-40f0-b5e1-fbd43020389b
 function find_motif(s, t)
-	query = ExactSearchQuery(LongDNA{2}(t))
-	[motif.start for motif in findall(query, LongDNA{2}(s))]
+    query = ExactSearchQuery(LongDNA{2}(t))
+    [motif.start for motif in findall(query, LongDNA{2}(s))]
 end
 
 # ╔═╡ d352fc48-af67-4286-9c3e-bf4c8f189e6c
@@ -38,10 +38,10 @@ end
 
 # ╔═╡ 22d99059-3969-4d60-a201-9b73116e0754
 begin
-	infile = open("../datasets/rosalind_subs.txt");
-	lines = readlines(infile)
-	s = lines[1]
-	t = lines[2]
+    infile = open("../datasets/rosalind_subs.txt")
+    lines = readlines(infile)
+    s = lines[1]
+    t = lines[2]
 end
 
 

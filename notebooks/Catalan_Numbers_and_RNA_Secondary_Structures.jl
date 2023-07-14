@@ -22,37 +22,40 @@ Return: The total number of noncrossing perfect matchings of basepair edges in t
 import StatsBase: countmap
 
 function is_valid(s::LongRNA)
-  counts = countmap(s)
-  all([
-    get(counts, RNA_A, 0) == get(counts, RNA_U, 0),
-    get(counts, RNA_C, 0) == get(counts, RNA_G, 0)
-  ])
+    counts = countmap(s)
+    all([
+        get(counts, RNA_A, 0) == get(counts, RNA_U, 0),
+        get(counts, RNA_C, 0) == get(counts, RNA_G, 0),
+    ])
 end
 
 function is_match(a::RNA, b::RNA)
-  return (a == RNA_A && b == RNA_U) || (a == RNA_U && b == RNA_A) || (a == RNA_C && b == RNA_G) || (a == RNA_G && b == RNA_C)
+    return (a == RNA_A && b == RNA_U) ||
+           (a == RNA_U && b == RNA_A) ||
+           (a == RNA_C && b == RNA_G) ||
+           (a == RNA_G && b == RNA_C)
 end
 
 function catalan_numbers(s::LongRNA)
-  memo = Dict{LongRNA,BigInt}(rna"" => 1)
-  function f(s)
-    if s in keys(memo)
-      return memo[s]
+    memo = Dict{LongRNA,BigInt}(rna"" => 1)
+    function f(s)
+        if s in keys(memo)
+            return memo[s]
+        end
+        if !is_valid(s)
+            memo[s] = 0
+            return 0
+        end
+        acc = BigInt(0)
+        for i in eachindex(s)
+            if is_match(s[1], s[i])
+                acc += f(s[2:i-1]) * f(s[i+1:end])
+            end
+        end
+        memo[s] = mod(acc, 1_000_000)
+        return memo[s]
     end
-    if !is_valid(s)
-      memo[s] = 0
-      return 0
-    end
-    acc = BigInt(0)
-    for i in eachindex(s)
-      if is_match(s[1], s[i])
-        acc += f(s[2:i-1]) * f(s[i+1:end])
-      end
-    end
-    memo[s] = mod(acc, 1_000_000)
-    return memo[s]
-  end
-  f(s)
+    f(s)
 end
 
 @test catalan_numbers(rna"AUAU") == 2

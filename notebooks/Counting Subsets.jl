@@ -16,11 +16,11 @@ Return: The total number of subsets of {1,2,…,n} modulo 1,000,000.
 
 # Use the fact that all subsets are the binary representation of the numbers from 0 to 2^n - 1
 function count_subsets(n)
-  acc = 1
-  for _ in 1:n
-    acc = mod(acc * 2, 1_000_000)
-  end
-  acc
+    acc = 1
+    for _ = 1:n
+        acc = mod(acc * 2, 1_000_000)
+    end
+    acc
 end
 
 @test count_subsets(3) == 8

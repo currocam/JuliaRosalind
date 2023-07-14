@@ -15,13 +15,13 @@ using Test
 using FASTX
 
 is_palindrome = x -> x == reverse_complement(x)
-function find_palindromes(x::LongDNA, min_length=4, max_length=12)
+function find_palindromes(x::LongDNA, min_length = 4, max_length = 12)
     n = length(x)
     # Create empty array of tuples
-    result = Array{Tuple{Int, Int}, 1}()
+    result = Array{Tuple{Int,Int},1}()
 
-    for length in max_length:-1:min_length
-        for i in 1:n-length+1
+    for length = max_length:-1:min_length
+        for i = 1:n-length+1
             substring = x[i:i+length-1]
             if is_palindrome(substring)
                 push!(result, (i, length))
