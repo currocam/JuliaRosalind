@@ -6,7 +6,7 @@ Return: A longest common subsequence of s
 
 function longest_common_subsequence(s1::LongDNA, s2::LongDNA)
   scoremodel = AffineGapScoreModel(DichotomousSubstitutionMatrix(1, -1), gap_open=0, gap_extend=0)
-  aln = pairalign(LocalAlignment(), s1, s2, scoremodel) |> alignment
+  aln = pairalign(GlobalAlignment(), s1, s2, scoremodel) |> alignment
   # Remove gaps from alignment
   LongDNA{4}([a for (a, b) in aln if a != DNA_Gap && b != DNA_Gap])
 end
